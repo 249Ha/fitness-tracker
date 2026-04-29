@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フィットトラッカー</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <h1 id="page-title">フィットトラッカー</h1>
+            <button id="add-btn" class="add-button" onclick="showAddModal()">＋</button>
+        </header>
+
+        <main id="main-content">
+            <!-- Home Tab -->
+            <div id="tab-home" class="tab-content active">
+                <div class="stats-row" id="stats-row"></div>
+                <div id="body-metrics-overview"></div>
+                <div id="meal-overview"></div>
+                <div id="today-section"></div>
+                <div id="recent-section"></div>
+            </div>
+
+            <!-- Progress Tab -->
+            <div id="tab-progress" class="tab-content">
+                <div class="category-picker" id="category-picker"></div>
+                <div id="sub-picker"></div>
+                <div id="chart-container"></div>
+                <div id="progress-stats"></div>
+                <div id="record-list"></div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="tab-history" class="tab-content">
+                <div id="history-list"></div>
+            </div>
+        </main>
+
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">
+                <span class="tab-icon">🏠</span>
+                <span class="tab-label">ホーム</span>
+            </button>
+            <button class="tab-btn" data-tab="progress" onclick="switchTab('progress')">
+                <span class="tab-icon">📈</span>
+                <span class="tab-label">進捗</span>
+            </button>
+            <button class="tab-btn" data-tab="history" onclick="switchTab('history')">
+                <span class="tab-icon">📅</span>
+                <span class="tab-label">履歴</span>
+            </button>
+        </nav>
+
+        <!-- Add Workout Modal -->
+        <div id="add-modal" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="cancel-btn" onclick="hideAddModal()">キャンセル</button>
+                    <h2>ワークアウトを記録</h2>
+                    <div style="width:80px"></div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="date-header" id="modal-date"></div>
+
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon green">⚖️</span>
+                            <span class="section-title">体組成の記録</span>
+                            <span class="optional-badge">任意</span>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>体重 (kg)</label>
+                                <input type="number" id="input-body-weight" placeholder="70.0" step="0.1">
+                            </div>
+                            <div class="input-group">
+                                <label>体脂肪率 (%)</label>
+                                <input type="number" id="input-body-fat" placeholder="18.5" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-icon orange">🍽️</span>
+                            <span class="section-title">食事の記録</span>
+                            <span class="optional-badge">任意</span>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>カロリー (kcal)</label>
+                                <input type="number" id="input-calories" placeholder="2100">
+                            </div>
+                            <div class="input-group">
+                                <label>タンパク質 (g)</label>
+                                <input type="number" id="input-protein" placeholder="140" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="exercise-inputs"></div>
+
+                    <button class="add-exercise-btn" onclick="addExerciseInput()">
+                        ＋ 種目を追加
+                    </button>
+
+                    <div style="height: 100px;"></div>
+                </div>
+
+                <div class="save-bar">
+                    <span class="save-summary" id="save-summary">未入力</span>
+                    <button class="save-btn" id="save-btn" onclick="saveWorkout()" disabled>保存する</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation -->
+        <div id="delete-modal" class="modal-overlay" style="display:none;">
+            <div class="confirm-dialog">
+                <p>このワークアウトを削除しますか？</p>
+                <div class="confirm-actions">
+                    <button class="confirm-cancel" onclick="hideDeleteModal()">キャンセル</button>
+                    <button class="confirm-delete" id="confirm-delete-btn">削除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

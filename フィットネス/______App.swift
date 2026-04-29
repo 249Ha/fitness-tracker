@@ -1,10 +1,3 @@
-//
-//  ______App.swift
-//  フィットネス
-//
-//  Created by haruto sugiyama on 2026/04/28.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -12,7 +5,8 @@ import SwiftData
 struct ______App: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Workout.self,
+            Exercise.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
